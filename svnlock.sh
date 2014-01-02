@@ -22,17 +22,20 @@ showhelp() {
 
 lock() {
     DIR=$1
-    echo "Gathering files"
-    files=`$SVN list -R $DIR | grep -v '/$'`
-    
     if [[ ! -z "$2" ]]; then
         MSG="-m \"$2\""
     fi
 
+    echo "Gathering files"
+    files=`$SVN list -R $DIR | grep -v '/$'`
+
+    ALLFILES=""
     for file in $files; do
-        echo "... locking $file"
-        $SVN lock "$DIR/$file" $MSG
+        ALLFILES+="$DIR/$file "
     done
+
+    echo "Locking files"
+    $SVN lock $MSG $ALLFILES
     echo "All files in $DIR locked. Remember to commit changes."
 }
 
@@ -40,10 +43,14 @@ unlock() {
     DIR=$1
     echo "Gathering files"
     files=`$SVN st -u $DIR | grep "^.\{5\}[O|K]" | rev | cut -d' ' -f1 | rev`
+
+    ALLFILES=""
     for file in $files; do
-        echo "... unlocking $file"
-        $SVN unlock $file
+        ALLFILES+="$files "
     done
+
+    echo "Unlocking files"
+    $SVN unlock $ALLFILES
     echo "All files in $DIR unlocked. Remember to commit changes."
 }
 
