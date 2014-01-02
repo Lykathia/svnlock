@@ -6,15 +6,15 @@ Recursively locks/unlocks all files in a given SVN directory.
 ####Usage
 
 The u option unlocks all files in the given directory recursively.  
-The l option locks all files in the given directory recursively.  
+The m option gives a message when lock the files.  
 The p option prompts the user for their SVN password.
 
 #####SYNOPSIS
-svnlock [-u dir] [-l dir] [-p]
+svnlock [-u] [-p] [-m <message>] dir
 
 #####Example
 
-    $ ./svnlock.sh -u /path/to/repo -p 
+    $ ./svnlock.sh -u -p /path/to/repo
     Enter SVN Password: 
     Now running ...
     Gathering files

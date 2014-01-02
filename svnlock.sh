@@ -17,16 +17,21 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 showhelp() {
-    echo "usage: [-u directory] [-l directory] [-svnpass]"
+    echo "usage: [-u] [-p] [-m <message>] directory"
 }
 
 lock() {
     DIR=$1
     echo "Gathering files"
     files=`$SVN list -R $DIR | grep -v '/$'`
+    
+    if [[ ! -z "$2" ]]; then
+        MSG="-m \"$2\""
+    fi
+
     for file in $files; do
         echo "... locking $file"
-        $SVN lock "$DIR/$file"
+        $SVN lock "$DIR/$file" $MSG
     done
     echo "All files in $DIR locked. Remember to commit changes."
 }
@@ -43,17 +48,14 @@ unlock() {
 }
 
 UNLOCK_FLAG=
-LOCK_FLAG=
 SVN_PASS=
 
 # Parse Command Line Arguments
-while getopts "u:l:p" opt; do
+while getopts "upm:" opt; do
     case "$opt" in
         u)  UNLOCK_FLAG=1
-            UNLOCK_DIR="$OPTARG"
             ;;
-        l)  LOCK_FLAG=1
-            LOCK_DIR="$OPTARG"
+        m)  LOCK_MSG="$OPTARG"
             ;;
         p)  read -s -p "Enter SVN Password: " SVN_PASS
             ;;
@@ -61,16 +63,21 @@ while getopts "u:l:p" opt; do
             ;;
     esac
 done
+DIR=${@:$OPTIND:1}
+
+if [[ -z "$DIR" ]]; then
+    showhelp
+    exit 1
+fi
 
 SVN="svn"
-if [ ! -z "$SVN_PASS" ]; then
+if [[ ! -z "$SVN_PASS" ]]; then
     SVN="svn --password $SVN_PASS"
 fi
 
 echo -e "\nNow running ...\n"
-if [ ! -z "$LOCK_FLAG" ]; then
-    lock $LOCK_DIR
-fi
-if [ ! -z "$UNLOCK_FLAG" ]; then
-    unlock $UNLOCK_DIR
+if [[ ! -z "$UNLOCK_FLAG" ]]; then
+    unlock $DIR
+else
+    lock $DIR $LOCK_MSG
 fi
