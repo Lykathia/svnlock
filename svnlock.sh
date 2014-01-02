@@ -44,11 +44,7 @@ unlock() {
     echo "Gathering files"
     files=`$SVN st -u $DIR | grep "^.\{5\}[O|K]" | rev | cut -d' ' -f1 | rev`
 
-    ALLFILES=""
-    for file in $files; do
-        ALLFILES+=`echo "$file " | tr -d '\n'`
-    done
-
+    ALLFILES="$(echo $files)"
     echo "Unlocking files"
     $SVN unlock $ALLFILES
     echo "All files in $DIR unlocked. Remember to commit changes."
