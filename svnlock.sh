@@ -35,7 +35,7 @@ lock() {
     done
 
     echo "Locking files"
-    $SVN lock $MSG $ALLFILES
+    $SVN lock "$MSG" $ALLFILES
     echo "All files in $DIR locked. Remember to commit changes."
 }
 
@@ -46,7 +46,7 @@ unlock() {
 
     ALLFILES=""
     for file in $files; do
-        ALLFILES+="$files "
+        ALLFILES+=`echo "$file " | tr -d '\n'`
     done
 
     echo "Unlocking files"
@@ -84,7 +84,7 @@ fi
 
 echo -e "\nNow running ...\n"
 if [[ ! -z "$UNLOCK_FLAG" ]]; then
-    unlock $DIR
+    unlock "$DIR"
 else
-    lock $DIR $LOCK_MSG
+    lock "$DIR" "$LOCK_MSG"
 fi
