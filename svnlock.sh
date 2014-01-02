@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # Recursively (un)lock all files in a given svn directory.
 # Copyright (C) 2014 Evan Lowry <lowry.e@gmail.com>
