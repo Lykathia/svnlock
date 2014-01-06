@@ -36,7 +36,7 @@ lock() {
 
     echo "Locking files"
     $SVN lock "$MSG" $ALLFILES
-    echo "All files in $DIR locked. Remember to commit changes."
+    echo "All files in $DIR locked."
 }
 
 unlock() {
@@ -47,7 +47,7 @@ unlock() {
     ALLFILES="$(echo $files)"
     echo "Unlocking files"
     $SVN unlock $ALLFILES
-    echo "All files in $DIR unlocked. Remember to commit changes."
+    echo "All files in $DIR unlocked."
 }
 
 UNLOCK_FLAG=
