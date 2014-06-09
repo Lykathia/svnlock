@@ -46,7 +46,7 @@ unlock() {
 
     ALLFILES="$(echo $files)"
     echo "Unlocking files"
-    $SVN unlock $ALLFILES
+    $SVN unlock --force $ALLFILES
     echo "All files in $DIR unlocked."
 }
 
